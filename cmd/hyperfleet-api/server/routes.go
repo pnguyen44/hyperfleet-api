@@ -92,6 +92,10 @@ func (s *apiServer) routes(tracingEnabled bool) *mux.Router {
 		apiV1Router.Use(callerIdentityMW.ResolveCallerIdentity)
 	}
 
+	if env().Config.OPA != nil && env().Config.OPA.Enabled {
+		apiV1Router.Use(middleware.OPAMiddleware(env().Config.OPA))
+	}
+
 	// Auto-discovered routes (no manual editing needed)
 	LoadDiscoveredRoutes(apiV1Router, services)
 

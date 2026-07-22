@@ -182,6 +182,11 @@ func (l *ConfigLoader) validateConfig(config *ApplicationConfig) error {
 		if valErr := config.Metrics.Validate(); valErr != nil {
 			return fmt.Errorf("metrics config validation failed: %w", valErr)
 		}
+		if config.OPA != nil {
+			if valErr := config.OPA.Validate(); valErr != nil {
+				return fmt.Errorf("OPA config validation failed: %w", valErr)
+			}
+		}
 		return nil
 	}
 
@@ -302,6 +307,11 @@ func (l *ConfigLoader) bindAllEnvVars() {
 
 	// Entities: config-file-only (complex list-of-struct type).
 	// No env var or CLI flag bindings — loaded exclusively via YAML config.
+
+	// OPA config
+	l.bindEnv("opa.enabled")
+	l.bindEnv("opa.url")
+	l.bindEnv("opa.timeout")
 }
 
 // bindFlags binds command-line flags to their corresponding Viper config keys
