@@ -1,0 +1,931 @@
+{
+ "partition": "mgmt-cluster-01",
+ "desires": [
+  {
+   "id": "mgmt-cluster-01/read//serviceaccounts/default/test-hyperfleet-api",
+   "type": "read",
+   "group": "",
+   "resource": "serviceaccounts",
+   "namespace": "default",
+   "name": "test-hyperfleet-api",
+   "owner": "cluster-adapter",
+   "resource_id": "cluster-01-test-hyperfleet-api",
+   "status": {
+    "observed_generation": 10,
+    "conditions": [
+     {
+      "type": "Available",
+      "status": "True",
+      "reason": "Ready"
+     }
+    ]
+   },
+   "kubeContent": {
+    "apiVersion": "v1",
+    "kind": "ServiceAccount",
+    "metadata": {
+     "name": "test-hyperfleet-api",
+     "labels": {
+      "helm.sh/chart": "hyperfleet-api-1.3.0",
+      "app.kubernetes.io/name": "hyperfleet-api",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/version": "test",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/component": "api"
+     }
+    }
+   }
+  },
+  {
+   "id": "mgmt-cluster-01/read//secrets/default/test-hyperfleet-api-db-secrets",
+   "type": "read",
+   "group": "",
+   "resource": "secrets",
+   "namespace": "default",
+   "name": "test-hyperfleet-api-db-secrets",
+   "owner": "cluster-adapter",
+   "resource_id": "cluster-01-test-hyperfleet-api-db-secrets",
+   "status": {
+    "observed_generation": 11,
+    "conditions": [
+     {
+      "type": "Available",
+      "status": "True",
+      "reason": "Ready"
+     }
+    ]
+   },
+   "kubeContent": {
+    "apiVersion": "v1",
+    "kind": "Secret",
+    "metadata": {
+     "name": "test-hyperfleet-api-db-secrets",
+     "labels": {
+      "helm.sh/chart": "hyperfleet-api-1.3.0",
+      "app.kubernetes.io/name": "hyperfleet-api",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/version": "test",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/component": "postgresql"
+     }
+    },
+    "type": "Opaque",
+    "stringData": {
+     "db.host": "test-hyperfleet-api-postgresql",
+     "db.port": "5432",
+     "db.name": "hyperfleet",
+     "db.user": "hyperfleet",
+     "db.password": "hyperfleet-dev-password"
+    }
+   }
+  },
+  {
+   "id": "mgmt-cluster-01/read//configmaps/default/test-hyperfleet-api-config",
+   "type": "read",
+   "group": "",
+   "resource": "configmaps",
+   "namespace": "default",
+   "name": "test-hyperfleet-api-config",
+   "owner": "cluster-adapter",
+   "resource_id": "cluster-01-test-hyperfleet-api-config",
+   "status": {
+    "observed_generation": 12,
+    "conditions": [
+     {
+      "type": "Available",
+      "status": "True",
+      "reason": "Ready"
+     }
+    ]
+   },
+   "kubeContent": {
+    "apiVersion": "v1",
+    "kind": "ConfigMap",
+    "metadata": {
+     "name": "test-hyperfleet-api-config",
+     "labels": {
+      "helm.sh/chart": "hyperfleet-api-1.3.0",
+      "app.kubernetes.io/name": "hyperfleet-api",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/version": "test",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/component": "api"
+     }
+    },
+    "data": {
+     "config.yaml": "# HyperFleet API Configuration\n# Generated from Helm values.yaml\n\nserver:\n  hostname: \"\"\n  host: \"0.0.0.0\"\n  port: 8000\n  openapi_schema_path: openapi/openapi.yaml\n\n  timeouts:\n    read: 5s\n    write: 30s\n\n  tls:\n    enabled: false\n    cert_file: \"\"\n    key_file: \"\"\n\n  jwt:\n    enabled: false\n\n  tenant:\n    enabled: false\n    system_header: \"\"\n    dimensions: []\n\ndatabase:\n  dialect: postgres\n\n  # ============================================================\n  # Database Connection (Provided by Secret in Kubernetes)\n  # ============================================================\n  # The following connection values are placeholders for documentation.\n  # In Kubernetes deployments, actual credentials come from Secret\n  # via secretKeyRef environment variables (HYPERFLEET_DATABASE_*).\n  #\n  # For custom ConfigMap users: update these values as needed.\n  # ============================================================\n  host: test-hyperfleet-api-postgresql\n  port: 5432\n  name: hyperfleet\n  # username/password: Not included in ConfigMap for security.\n  #   This Helm chart injects credentials via secretKeyRef (Kubernetes best practice).\n  #   The application also supports direct env vars, *_FILE env vars, or config file values.\n  #   See deployment.md for Kubernetes setup or docs/config.md for all configuration options.\n\n  # Application behavior settings\n  debug: false\n\n  ssl:\n    mode: disable\n    root_cert_file: \"\"\n\n  pool:\n    max_connections: 50\n    max_idle_connections: 10\n    conn_max_lifetime: 5m\n    conn_max_idle_time: 1m\n    request_timeout: 30s\n    conn_retry_attempts: 10\n    conn_retry_interval: 3s\n\nlogging:\n  level: info\n  format: json\n  output: stdout\n\n  masking:\n    enabled: true\n    headers:\n      - Authorization\n      - X-API-Key\n      - Cookie\n      - X-Auth-Token\n      - X-Forwarded-Authorization\n      - X-HyperFleet-Identity\n    fields:\n      - password\n      - secret\n      - token\n      - api_key\n      - access_token\n      - refresh_token\n      - client_secret\n\nmetrics:\n  host: 0.0.0.0\n  port: 9090\n\n  tls:\n    enabled: false\n\n  label_metrics_inclusion_duration: 168h\n\nhealth:\n  host: 0.0.0.0\n  port: 8080\n\n  tls:\n    enabled: false\n\n  shutdown_timeout: 20s\n  db_ping_timeout: 2s\n# NOTE: When EntityDescriptor gains many more fields, consider replacing\n# the explicit range below with: .Values.config.entities | toYaml | indent 6\nentities:\n  - kind: Cluster\n    plural: clusters\n    spec_schema_name: ClusterSpec\n    required_adapters:\n      - validation\n      - dns\n      - pullsecret\n      - hypershift\n    name_min_len: 3\n    name_max_len: 53\n    require_spec_schema: true\n  - kind: NodePool\n    plural: nodepools\n    parent_kind: Cluster\n    on_parent_delete: cascade\n    spec_schema_name: NodePoolSpec\n    required_adapters:\n      - validation\n      - hypershift\n    name_min_len: 3\n    name_max_len: 15\n    require_spec_schema: true\n  - kind: Channel\n    plural: channels\n    spec_schema_name: ChannelSpec\n  - kind: Version\n    plural: versions\n    parent_kind: Channel\n    on_parent_delete: restrict\n    spec_schema_name: VersionSpec\n    required_adapters:\n      - validation\n    references:\n      - ref_type: channel\n        target_kind: Channel\n        min: 1\n        max: 1\n  - kind: WifConfig\n    plural: wifconfigs\n    spec_schema_name: WifConfigSpec\n"
+    }
+   }
+  },
+  {
+   "id": "mgmt-cluster-01/read//services/default/test-hyperfleet-api-postgresql",
+   "type": "read",
+   "group": "",
+   "resource": "services",
+   "namespace": "default",
+   "name": "test-hyperfleet-api-postgresql",
+   "owner": "cluster-adapter",
+   "resource_id": "cluster-01-test-hyperfleet-api-postgresql",
+   "status": {
+    "observed_generation": 13,
+    "conditions": [
+     {
+      "type": "Available",
+      "status": "True",
+      "reason": "Ready"
+     }
+    ]
+   },
+   "kubeContent": {
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+     "name": "test-hyperfleet-api-postgresql",
+     "labels": {
+      "helm.sh/chart": "hyperfleet-api-1.3.0",
+      "app.kubernetes.io/name": "hyperfleet-api",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/version": "test",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/component": "postgresql"
+     }
+    },
+    "spec": {
+     "type": "ClusterIP",
+     "ports": [
+      {
+       "port": 5432,
+       "targetPort": "postgresql",
+       "protocol": "TCP",
+       "name": "postgresql"
+      }
+     ],
+     "selector": {
+      "app.kubernetes.io/name": "hyperfleet-api",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/component": "postgresql"
+     }
+    }
+   }
+  },
+  {
+   "id": "mgmt-cluster-01/read//services/default/hyperfleet-api",
+   "type": "read",
+   "group": "",
+   "resource": "services",
+   "namespace": "default",
+   "name": "hyperfleet-api",
+   "owner": "cluster-adapter",
+   "resource_id": "cluster-01-hyperfleet-api",
+   "status": {
+    "observed_generation": 14,
+    "conditions": [
+     {
+      "type": "Available",
+      "status": "True",
+      "reason": "Ready"
+     }
+    ]
+   },
+   "kubeContent": {
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+     "name": "hyperfleet-api",
+     "labels": {
+      "helm.sh/chart": "hyperfleet-api-1.3.0",
+      "app.kubernetes.io/name": "hyperfleet-api",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/version": "test",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/component": "api"
+     }
+    },
+    "spec": {
+     "type": "ClusterIP",
+     "ports": [
+      {
+       "port": 8000,
+       "targetPort": "http",
+       "protocol": "TCP",
+       "name": "http"
+      },
+      {
+       "port": 8080,
+       "targetPort": "health",
+       "protocol": "TCP",
+       "name": "health"
+      },
+      {
+       "port": 9090,
+       "targetPort": "metrics",
+       "protocol": "TCP",
+       "name": "metrics"
+      }
+     ],
+     "selector": {
+      "app.kubernetes.io/name": "hyperfleet-api",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/component": "api"
+     }
+    }
+   }
+  },
+  {
+   "id": "mgmt-cluster-01/read/apps/deployments/default/test-hyperfleet-api",
+   "type": "read",
+   "group": "apps",
+   "resource": "deployments",
+   "namespace": "default",
+   "name": "test-hyperfleet-api",
+   "owner": "cluster-adapter",
+   "resource_id": "cluster-01-test-hyperfleet-api",
+   "status": {
+    "observed_generation": 15,
+    "conditions": [
+     {
+      "type": "Available",
+      "status": "True",
+      "reason": "Ready"
+     }
+    ]
+   },
+   "kubeContent": {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+     "name": "test-hyperfleet-api",
+     "labels": {
+      "helm.sh/chart": "hyperfleet-api-1.3.0",
+      "app.kubernetes.io/name": "hyperfleet-api",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/version": "test",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/component": "api"
+     }
+    },
+    "spec": {
+     "replicas": 1,
+     "strategy": {
+      "rollingUpdate": {
+       "maxSurge": 1,
+       "maxUnavailable": 0
+      },
+      "type": "RollingUpdate"
+     },
+     "selector": {
+      "matchLabels": {
+       "app.kubernetes.io/name": "hyperfleet-api",
+       "app.kubernetes.io/instance": "test",
+       "app.kubernetes.io/component": "api"
+      }
+     },
+     "template": {
+      "metadata": {
+       "annotations": {
+        "checksum/config": "9daaf519e387200832a4854d93a7e2b46cc3a8cfd13c7b03246f3865e28666c8"
+       },
+       "labels": {
+        "app.kubernetes.io/name": "hyperfleet-api",
+        "app.kubernetes.io/instance": "test",
+        "app.kubernetes.io/component": "api"
+       }
+      },
+      "spec": {
+       "serviceAccountName": "test-hyperfleet-api",
+       "terminationGracePeriodSeconds": 45,
+       "securityContext": {
+        "fsGroup": 65532,
+        "runAsNonRoot": true,
+        "runAsUser": 65532
+       },
+       "initContainers": [
+        {
+         "name": "wait-for-db",
+         "image": "busybox:1.36",
+         "command": [
+          "sh",
+          "-c",
+          "until nc -z test-hyperfleet-api-postgresql 5432; do echo waiting for postgresql; sleep 2; done"
+         ]
+        },
+        {
+         "name": "db-migrate",
+         "image": "quay.io/openshift-hyperfleet/hyperfleet-api:test",
+         "imagePullPolicy": "Always",
+         "command": [
+          "/app/hyperfleet-api",
+          "migrate"
+         ],
+         "env": [
+          {
+           "name": "HYPERFLEET_CONFIG",
+           "value": "/etc/hyperfleet/config.yaml"
+          },
+          {
+           "name": "HYPERFLEET_DATABASE_HOST",
+           "valueFrom": {
+            "secretKeyRef": {
+             "name": "test-hyperfleet-api-db-secrets",
+             "key": "db.host"
+            }
+           }
+          },
+          {
+           "name": "HYPERFLEET_DATABASE_PORT",
+           "valueFrom": {
+            "secretKeyRef": {
+             "name": "test-hyperfleet-api-db-secrets",
+             "key": "db.port"
+            }
+           }
+          },
+          {
+           "name": "HYPERFLEET_DATABASE_NAME",
+           "valueFrom": {
+            "secretKeyRef": {
+             "name": "test-hyperfleet-api-db-secrets",
+             "key": "db.name"
+            }
+           }
+          },
+          {
+           "name": "HYPERFLEET_DATABASE_USERNAME",
+           "valueFrom": {
+            "secretKeyRef": {
+             "name": "test-hyperfleet-api-db-secrets",
+             "key": "db.user"
+            }
+           }
+          },
+          {
+           "name": "HYPERFLEET_DATABASE_PASSWORD",
+           "valueFrom": {
+            "secretKeyRef": {
+             "name": "test-hyperfleet-api-db-secrets",
+             "key": "db.password"
+            }
+           }
+          }
+         ],
+         "volumeMounts": [
+          {
+           "name": "config",
+           "mountPath": "/etc/hyperfleet",
+           "readOnly": true
+          }
+         ]
+        }
+       ],
+       "containers": [
+        {
+         "name": "hyperfleet-api",
+         "securityContext": {
+          "allowPrivilegeEscalation": false,
+          "capabilities": {
+           "drop": [
+            "ALL"
+           ]
+          },
+          "readOnlyRootFilesystem": true,
+          "seccompProfile": {
+           "type": "RuntimeDefault"
+          }
+         },
+         "image": "quay.io/openshift-hyperfleet/hyperfleet-api:test",
+         "imagePullPolicy": "Always",
+         "workingDir": "/app",
+         "args": [
+          "serve"
+         ],
+         "ports": [
+          {
+           "name": "http",
+           "containerPort": 8000,
+           "protocol": "TCP"
+          },
+          {
+           "name": "health",
+           "containerPort": 8080,
+           "protocol": "TCP"
+          },
+          {
+           "name": "metrics",
+           "containerPort": 9090,
+           "protocol": "TCP"
+          }
+         ],
+         "env": [
+          {
+           "name": "HYPERFLEET_CONFIG",
+           "value": "/etc/hyperfleet/config.yaml"
+          },
+          {
+           "name": "HYPERFLEET_TRACING_ENABLED",
+           "value": "false"
+          },
+          {
+           "name": "HYPERFLEET_DATABASE_HOST",
+           "valueFrom": {
+            "secretKeyRef": {
+             "name": "test-hyperfleet-api-db-secrets",
+             "key": "db.host"
+            }
+           }
+          },
+          {
+           "name": "HYPERFLEET_DATABASE_PORT",
+           "valueFrom": {
+            "secretKeyRef": {
+             "name": "test-hyperfleet-api-db-secrets",
+             "key": "db.port"
+            }
+           }
+          },
+          {
+           "name": "HYPERFLEET_DATABASE_NAME",
+           "valueFrom": {
+            "secretKeyRef": {
+             "name": "test-hyperfleet-api-db-secrets",
+             "key": "db.name"
+            }
+           }
+          },
+          {
+           "name": "HYPERFLEET_DATABASE_USERNAME",
+           "valueFrom": {
+            "secretKeyRef": {
+             "name": "test-hyperfleet-api-db-secrets",
+             "key": "db.user"
+            }
+           }
+          },
+          {
+           "name": "HYPERFLEET_DATABASE_PASSWORD",
+           "valueFrom": {
+            "secretKeyRef": {
+             "name": "test-hyperfleet-api-db-secrets",
+             "key": "db.password"
+            }
+           }
+          }
+         ],
+         "livenessProbe": {
+          "httpGet": {
+           "path": "/healthz",
+           "port": "health"
+          },
+          "initialDelaySeconds": 15,
+          "periodSeconds": 20,
+          "timeoutSeconds": 5,
+          "failureThreshold": 3
+         },
+         "readinessProbe": {
+          "httpGet": {
+           "path": "/readyz",
+           "port": "health"
+          },
+          "initialDelaySeconds": 5,
+          "periodSeconds": 5,
+          "timeoutSeconds": 3,
+          "failureThreshold": 3
+         },
+         "resources": {
+          "limits": {
+           "cpu": "500m",
+           "memory": "512Mi"
+          },
+          "requests": {
+           "cpu": "100m",
+           "memory": "128Mi"
+          }
+         },
+         "lifecycle": {
+          "preStop": {
+           "exec": {
+            "command": [
+             "/bin/sh",
+             "-c",
+             "sleep 5"
+            ]
+           }
+          }
+         },
+         "volumeMounts": [
+          {
+           "name": "config",
+           "mountPath": "/etc/hyperfleet",
+           "readOnly": true
+          },
+          {
+           "name": "tmp",
+           "mountPath": "/tmp"
+          }
+         ]
+        }
+       ],
+       "volumes": [
+        {
+         "name": "config",
+         "configMap": {
+          "name": "test-hyperfleet-api-config"
+         }
+        },
+        {
+         "name": "tmp",
+         "emptyDir": {}
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "mgmt-cluster-01/read/apps/deployments/default/test-hyperfleet-api-postgresql",
+   "type": "read",
+   "group": "apps",
+   "resource": "deployments",
+   "namespace": "default",
+   "name": "test-hyperfleet-api-postgresql",
+   "owner": "cluster-adapter",
+   "resource_id": "cluster-01-test-hyperfleet-api-postgresql",
+   "status": {
+    "observed_generation": 16,
+    "conditions": [
+     {
+      "type": "Available",
+      "status": "True",
+      "reason": "Ready"
+     }
+    ]
+   },
+   "kubeContent": {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+     "name": "test-hyperfleet-api-postgresql",
+     "labels": {
+      "helm.sh/chart": "hyperfleet-api-1.3.0",
+      "app.kubernetes.io/name": "hyperfleet-api",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/version": "test",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/component": "postgresql"
+     }
+    },
+    "spec": {
+     "replicas": 1,
+     "selector": {
+      "matchLabels": {
+       "app.kubernetes.io/name": "hyperfleet-api",
+       "app.kubernetes.io/instance": "test",
+       "app.kubernetes.io/component": "postgresql"
+      }
+     },
+     "template": {
+      "metadata": {
+       "labels": {
+        "app.kubernetes.io/name": "hyperfleet-api",
+        "app.kubernetes.io/instance": "test",
+        "app.kubernetes.io/component": "postgresql"
+       }
+      },
+      "spec": {
+       "containers": [
+        {
+         "name": "postgresql",
+         "image": "docker.io/library/postgres:14.24",
+         "ports": [
+          {
+           "name": "postgresql",
+           "containerPort": 5432,
+           "protocol": "TCP"
+          }
+         ],
+         "env": [
+          {
+           "name": "POSTGRES_DB",
+           "value": "hyperfleet"
+          },
+          {
+           "name": "POSTGRES_USER",
+           "value": "hyperfleet"
+          },
+          {
+           "name": "POSTGRES_PASSWORD",
+           "value": "hyperfleet-dev-password"
+          }
+         ],
+         "resources": {
+          "limits": {
+           "cpu": "500m",
+           "memory": "512Mi"
+          },
+          "requests": {
+           "cpu": "100m",
+           "memory": "128Mi"
+          }
+         },
+         "readinessProbe": {
+          "exec": {
+           "command": [
+            "pg_isready",
+            "-U",
+            "hyperfleet",
+            "-d",
+            "hyperfleet"
+           ]
+          },
+          "initialDelaySeconds": 5,
+          "periodSeconds": 5
+         },
+         "livenessProbe": {
+          "exec": {
+           "command": [
+            "pg_isready",
+            "-U",
+            "hyperfleet",
+            "-d",
+            "hyperfleet"
+           ]
+          },
+          "initialDelaySeconds": 30,
+          "periodSeconds": 10
+         }
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "mgmt-cluster-01/read/apps/deployments/default/test-hyperfleet-sentinel",
+   "type": "read",
+   "group": "apps",
+   "resource": "deployments",
+   "namespace": "default",
+   "name": "test-hyperfleet-sentinel",
+   "owner": "cluster-adapter",
+   "resource_id": "cluster-01-test-hyperfleet-sentinel",
+   "status": {
+    "observed_generation": 17,
+    "conditions": [
+     {
+      "type": "Available",
+      "status": "True",
+      "reason": "Ready"
+     }
+    ]
+   },
+   "kubeContent": {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+     "name": "test-hyperfleet-sentinel",
+     "labels": {
+      "helm.sh/chart": "hyperfleet-sentinel-1.1.0",
+      "app.kubernetes.io/name": "hyperfleet-sentinel",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/version": "latest",
+      "app.kubernetes.io/managed-by": "Helm"
+     }
+    },
+    "spec": {
+     "replicas": 1,
+     "selector": {
+      "matchLabels": {
+       "app.kubernetes.io/name": "hyperfleet-sentinel",
+       "app.kubernetes.io/instance": "test"
+      }
+     },
+     "template": {
+      "metadata": {
+       "annotations": {
+        "checksum/config": "bfbde26afdf1db4b99a64604d8e442f53fcdefe9347ac224647a51d468bd51d3",
+        "checksum/secret": "0000000000000000000000000000000000000000000000000000000000000000"
+       },
+       "labels": {
+        "app.kubernetes.io/name": "hyperfleet-sentinel",
+        "app.kubernetes.io/instance": "test"
+       }
+      },
+      "spec": {
+       "serviceAccountName": "test-hyperfleet-sentinel",
+       "securityContext": {
+        "fsGroup": 65532,
+        "runAsNonRoot": true,
+        "runAsUser": 65532
+       },
+       "containers": [
+        {
+         "name": "hyperfleet-sentinel",
+         "securityContext": {
+          "allowPrivilegeEscalation": false,
+          "capabilities": {
+           "drop": [
+            "ALL"
+           ]
+          },
+          "readOnlyRootFilesystem": true,
+          "seccompProfile": {
+           "type": "RuntimeDefault"
+          }
+         },
+         "image": "quay.io/openshift-hyperfleet/openshift-hyperfleet/hyperfleet-sentinel:latest",
+         "imagePullPolicy": "Always",
+         "args": [
+          "serve",
+          "--config=/etc/hyperfleet/config.yaml"
+         ],
+         "ports": [
+          {
+           "name": "http",
+           "containerPort": 8080,
+           "protocol": "TCP"
+          },
+          {
+           "name": "metrics",
+           "containerPort": 9090,
+           "protocol": "TCP"
+          }
+         ],
+         "livenessProbe": {
+          "httpGet": {
+           "path": "/healthz",
+           "port": "http"
+          },
+          "initialDelaySeconds": 15,
+          "periodSeconds": 20,
+          "timeoutSeconds": 5,
+          "failureThreshold": 3
+         },
+         "readinessProbe": {
+          "httpGet": {
+           "path": "/readyz",
+           "port": "http"
+          },
+          "initialDelaySeconds": 5,
+          "periodSeconds": 10,
+          "timeoutSeconds": 3,
+          "failureThreshold": 3
+         },
+         "env": [
+          {
+           "name": "BROKER_CONFIG_FILE",
+           "value": "/etc/hyperfleet/broker.yaml"
+          },
+          {
+           "name": "BROKER_RABBITMQ_URL",
+           "valueFrom": {
+            "secretKeyRef": {
+             "name": "test-hyperfleet-sentinel-broker-credentials",
+             "key": "BROKER_RABBITMQ_URL"
+            }
+           }
+          },
+          {
+           "name": "HYPERFLEET_TRACING_ENABLED",
+           "value": "false"
+          }
+         ],
+         "volumeMounts": [
+          {
+           "name": "config",
+           "mountPath": "/etc/hyperfleet/config.yaml",
+           "subPath": "config.yaml",
+           "readOnly": true
+          },
+          {
+           "name": "broker-config",
+           "mountPath": "/etc/hyperfleet/broker.yaml",
+           "subPath": "broker.yaml",
+           "readOnly": true
+          }
+         ],
+         "resources": {
+          "limits": {
+           "cpu": "500m",
+           "memory": "512Mi"
+          },
+          "requests": {
+           "cpu": "100m",
+           "memory": "128Mi"
+          }
+         }
+        }
+       ],
+       "volumes": [
+        {
+         "name": "config",
+         "configMap": {
+          "name": "test-hyperfleet-sentinel-config"
+         }
+        },
+        {
+         "name": "broker-config",
+         "configMap": {
+          "name": "test-hyperfleet-sentinel-broker-config"
+         }
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "mgmt-cluster-01/read//configmaps/default/test-hyperfleet-sentinel-config",
+   "type": "read",
+   "group": "",
+   "resource": "configmaps",
+   "namespace": "default",
+   "name": "test-hyperfleet-sentinel-config",
+   "owner": "cluster-adapter",
+   "resource_id": "cluster-01-test-hyperfleet-sentinel-config",
+   "status": {
+    "observed_generation": 18,
+    "conditions": [
+     {
+      "type": "Available",
+      "status": "True",
+      "reason": "Ready"
+     }
+    ]
+   },
+   "kubeContent": {
+    "apiVersion": "v1",
+    "kind": "ConfigMap",
+    "metadata": {
+     "name": "test-hyperfleet-sentinel-config",
+     "labels": {
+      "helm.sh/chart": "hyperfleet-sentinel-1.1.0",
+      "app.kubernetes.io/name": "hyperfleet-sentinel",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/version": "latest",
+      "app.kubernetes.io/managed-by": "Helm"
+     }
+    },
+    "data": {
+     "config.yaml": "# Sentinel information\nsentinel:\n  name: \"hyperfleet-sentinel-clusters\"\n\n# Debug configuration\ndebug_config: false\n\n# Logging configuration\nlog:\n  level: \"info\"\n  format: \"json\"\n  output: \"stdout\"\n\n# Client configurations\nclients:\n  # HyperFleet API client\n  hyperfleet_api:\n    base_url: \"http://hyperfleet-api:8000\"\n    version: \"v1\"\n    timeout: \"10s\"\n\n  # Broker client\n  broker:\n    topic: \"default-clusters\"\n\n# Sentinel configuration\nresource_type: clusters\npoll_interval: 5s\n# Configurable CEL-based decision logic\nmessage_decision:\n  params:\n    - name: ref_time\n      expr: \"condition(\\\"Reconciled\\\").last_updated_time\"\n    - name: is_reconciled\n      expr: \"condition(\\\"Reconciled\\\").status == \\\"True\\\"\"\n    - name: has_ref_time\n      expr: \"ref_time != \\\"\\\"\"\n    - name: is_new_resource\n      expr: \"resource.generation == 1 && !has_ref_time\"\n    - name: generation_mismatch\n      expr: \"resource.generation > condition(\\\"Reconciled\\\").observed_generation\"\n    - name: reconciled_and_stale\n      expr: \"is_reconciled && has_ref_time && now - timestamp(ref_time) > duration(\\\"30m\\\")\"\n    - name: not_reconciled_and_debounced\n      expr: \"!is_reconciled && has_ref_time && now - timestamp(ref_time) > duration(\\\"10s\\\")\"\n  result: \"is_new_resource || generation_mismatch || reconciled_and_stale || not_reconciled_and_debounced\"\n# CloudEvents data payload configuration\nmessage_data:\n  generation: resource.generation\n  href: resource.href\n  id: resource.id\n  kind: resource.kind\n"
+    }
+   }
+  },
+  {
+   "id": "mgmt-cluster-01/read//services/default/test-hyperfleet-sentinel",
+   "type": "read",
+   "group": "",
+   "resource": "services",
+   "namespace": "default",
+   "name": "test-hyperfleet-sentinel",
+   "owner": "cluster-adapter",
+   "resource_id": "cluster-01-test-hyperfleet-sentinel",
+   "status": {
+    "observed_generation": 19,
+    "conditions": [
+     {
+      "type": "Available",
+      "status": "True",
+      "reason": "Ready"
+     }
+    ]
+   },
+   "kubeContent": {
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+     "name": "test-hyperfleet-sentinel",
+     "labels": {
+      "helm.sh/chart": "hyperfleet-sentinel-1.1.0",
+      "app.kubernetes.io/name": "hyperfleet-sentinel",
+      "app.kubernetes.io/instance": "test",
+      "app.kubernetes.io/version": "latest",
+      "app.kubernetes.io/managed-by": "Helm"
+     }
+    },
+    "spec": {
+     "type": "ClusterIP",
+     "ports": [
+      {
+       "port": 8080,
+       "targetPort": "http",
+       "protocol": "TCP",
+       "name": "http"
+      },
+      {
+       "port": 9090,
+       "targetPort": "metrics",
+       "protocol": "TCP",
+       "name": "metrics"
+      }
+     ],
+     "selector": {
+      "app.kubernetes.io/name": "hyperfleet-sentinel",
+      "app.kubernetes.io/instance": "test"
+     }
+    }
+   }
+  }
+ ]
+}

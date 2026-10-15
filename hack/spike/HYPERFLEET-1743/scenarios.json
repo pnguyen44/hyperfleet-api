@@ -1,0 +1,55 @@
+{
+  "transport": "rest-json-https",
+  "http_version": "1.1",
+  "fixtures": {
+    "partition_read": "partition-read-response.json",
+    "status_write": "status-write-request.json"
+  },
+  "settings": {
+    "warmup_seconds": 15,
+    "duration_seconds": 60,
+    "repetitions": 3,
+    "content_encoding": "identity",
+    "connection_reuse": true
+  },
+  "harness": {
+    "client": "go-net-http",
+    "workers_per_operation": 64,
+    "dispatch_tick_ms": 1
+  },
+  "scenarios": [
+    {
+      "name": "baseline",
+      "read_requests_per_second": 2000,
+      "status_write_requests_per_second": 20000,
+      "read_to_write_ratio": "1:10"
+    },
+    {
+      "name": "headroom",
+      "read_requests_per_second": 4000,
+      "status_write_requests_per_second": 40000,
+      "read_to_write_ratio": "1:10"
+    }
+  ],
+  "pass_criteria": {
+    "request_errors": 0,
+    "baseline_p95_latency_ms_below": 500,
+    "headroom_p95_latency_ms_below": 1000,
+    "headroom_egress_below_fraction_of_node_capacity": 0.25
+  },
+  "network_budget": {
+    "node_class": "e2-standard-4",
+    "node_egress_gbps": 4,
+    "node_egress_gbps_verified": false,
+    "note": "GCP egress figure unverified; confirm before finalizing the HLD transport decision"
+  },
+  "partition_read": {
+    "desires_per_partition": 10,
+    "page_size": 10,
+    "pages_per_poll": 1
+  },
+  "measurement": {
+    "http_request_and_response_bytes": true,
+    "includes_http_headers": true
+  }
+}

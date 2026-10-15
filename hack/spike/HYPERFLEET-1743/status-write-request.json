@@ -1,0 +1,54 @@
+{
+  "desire_id": "mgmt-cluster-01/read/apps/deployments/default/api",
+  "status": {
+    "observed_generation": 12,
+    "conditions": [
+      {
+        "type": "Available",
+        "status": "True",
+        "reason": "Ready",
+        "message": "Deployment has the requested available replicas"
+      },
+      {
+        "type": "Reconciled",
+        "status": "True",
+        "reason": "Applied",
+        "message": "Observed state matches the desired resource"
+      }
+    ],
+    "observed": {
+      "replicas": 3,
+      "ready_replicas": 3,
+      "available_replicas": 3,
+      "object": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "name": "api",
+          "namespace": "default",
+          "labels": {
+            "app.kubernetes.io/name": "api",
+            "app.kubernetes.io/part-of": "hyperfleet"
+          }
+        },
+        "status": {
+          "replicas": 3,
+          "readyReplicas": 3,
+          "availableReplicas": 3,
+          "conditions": [
+            {
+              "type": "Available",
+              "status": "True",
+              "reason": "MinimumReplicasAvailable"
+            },
+            {
+              "type": "Progressing",
+              "status": "True",
+              "reason": "NewReplicaSetAvailable"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

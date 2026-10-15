@@ -1,0 +1,185 @@
+{
+  "generated_at": "2026-10-15T18:33:09.777042Z",
+  "go": "go1.26.0",
+  "scenarios": [
+    {
+      "name": "baseline",
+      "reps": [
+        {
+          "read": {
+            "request_bytes": 13439776,
+            "response_bytes": 2433199446,
+            "request_bytes_each": 112,
+            "response_bytes_each": 20277,
+            "completed": 119998,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 1999.9666666666667,
+            "median_latency_ms": 0.344041,
+            "p95_latency_ms": 0.660958
+          },
+          "status_write": {
+            "request_bytes": 1252779120,
+            "response_bytes": 76798720,
+            "request_bytes_each": 1044,
+            "response_bytes_each": 64,
+            "completed": 1199980,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 19999.666666666668,
+            "median_latency_ms": 0.209958,
+            "p95_latency_ms": 0.397084
+          },
+          "ingress_mbps": 168.82918613333334,
+          "egress_mbps": 334.66642213333336
+        },
+        {
+          "read": {
+            "request_bytes": 13439776,
+            "response_bytes": 2433199446,
+            "request_bytes_each": 112,
+            "response_bytes_each": 20277,
+            "completed": 119998,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 1999.9666666666667,
+            "median_latency_ms": 0.358375,
+            "p95_latency_ms": 0.913
+          },
+          "status_write": {
+            "request_bytes": 1252779120,
+            "response_bytes": 76798720,
+            "request_bytes_each": 1044,
+            "response_bytes_each": 64,
+            "completed": 1199980,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 19999.666666666668,
+            "median_latency_ms": 0.215792,
+            "p95_latency_ms": 0.602791
+          },
+          "ingress_mbps": 168.82918613333334,
+          "egress_mbps": 334.66642213333336
+        },
+        {
+          "read": {
+            "request_bytes": 13439776,
+            "response_bytes": 2433199446,
+            "request_bytes_each": 112,
+            "response_bytes_each": 20277,
+            "completed": 119998,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 1999.9666666666667,
+            "median_latency_ms": 0.300083,
+            "p95_latency_ms": 0.505583
+          },
+          "status_write": {
+            "request_bytes": 1252779120,
+            "response_bytes": 76798720,
+            "request_bytes_each": 1044,
+            "response_bytes_each": 64,
+            "completed": 1199980,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 19999.666666666668,
+            "median_latency_ms": 0.193792,
+            "p95_latency_ms": 0.337792
+          },
+          "ingress_mbps": 168.82918613333334,
+          "egress_mbps": 334.66642213333336
+        }
+      ]
+    },
+    {
+      "name": "headroom",
+      "reps": [
+        {
+          "read": {
+            "request_bytes": 26879552,
+            "response_bytes": 4866398892,
+            "request_bytes_each": 112,
+            "response_bytes_each": 20277,
+            "completed": 239996,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 3999.9333333333334,
+            "median_latency_ms": 0.372584,
+            "p95_latency_ms": 0.991042
+          },
+          "status_write": {
+            "request_bytes": 2505558240,
+            "response_bytes": 153597440,
+            "request_bytes_each": 1044,
+            "response_bytes_each": 64,
+            "completed": 2399960,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 39999.333333333336,
+            "median_latency_ms": 0.250041,
+            "p95_latency_ms": 0.6535
+          },
+          "ingress_mbps": 337.6583722666667,
+          "egress_mbps": 669.3328442666667
+        },
+        {
+          "read": {
+            "request_bytes": 26879552,
+            "response_bytes": 4866398892,
+            "request_bytes_each": 112,
+            "response_bytes_each": 20277,
+            "completed": 239996,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 3999.9333333333334,
+            "median_latency_ms": 0.34975,
+            "p95_latency_ms": 0.80925
+          },
+          "status_write": {
+            "request_bytes": 2505558240,
+            "response_bytes": 153597440,
+            "request_bytes_each": 1044,
+            "response_bytes_each": 64,
+            "completed": 2399960,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 39999.333333333336,
+            "median_latency_ms": 0.248833,
+            "p95_latency_ms": 0.6045
+          },
+          "ingress_mbps": 337.6583722666667,
+          "egress_mbps": 669.3328442666667
+        },
+        {
+          "read": {
+            "request_bytes": 26879552,
+            "response_bytes": 4866398892,
+            "request_bytes_each": 112,
+            "response_bytes_each": 20277,
+            "completed": 239996,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 3999.9333333333334,
+            "median_latency_ms": 0.369166,
+            "p95_latency_ms": 0.879375
+          },
+          "status_write": {
+            "request_bytes": 2505558240,
+            "response_bytes": 153597440,
+            "request_bytes_each": 1044,
+            "response_bytes_each": 64,
+            "completed": 2399960,
+            "errors": 0,
+            "missed_dispatches": 0,
+            "achieved_rps": 39999.333333333336,
+            "median_latency_ms": 0.254834,
+            "p95_latency_ms": 0.610917
+          },
+          "ingress_mbps": 337.6583722666667,
+          "egress_mbps": 669.3328442666667
+        }
+      ]
+    }
+  ],
+  "num_cpu": 12
+}
